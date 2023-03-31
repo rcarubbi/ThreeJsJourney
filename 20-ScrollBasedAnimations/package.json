@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "deploy": "vercel --prod"
   },
   "devDependencies": {
     "vite": "^4.0.4"
   },
   "dependencies": {
+    "gsap": "^3.5.1",
     "lil-gui": "^0.17.0",
-    "three": "^0.148.0"
+    "three": "^0.148.0",
+    "vercel": "^28.18.3"
   }
 }
