@@ -10,6 +10,23 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader';
 // Debug
 const gui = new dat.GUI();
 
+let mixer = null;
+let action = null;
+let gltf = null;
+const changeAnimation = (animationNumber) => {
+	if (action) action.stop();
+	action = mixer.clipAction(gltf.animations[animationNumber]);
+	action.play();
+};
+const animations = {
+	look: () => changeAnimation(0),
+	run: () => changeAnimation(2),
+	walk: () => changeAnimation(1),
+};
+
+gui.add(animations, 'look');
+gui.add(animations, 'walk');
+gui.add(animations, 'run');
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
 
@@ -51,12 +68,11 @@ gltfLoader.setDRACOLoader(dracoLoader);
 // 	const object3d = gltf.scene.children[0];
 // 	scene.add(object3d);
 // });
-let mixer = null;
-gltfLoader.load('/models/Fox/glTF/Fox.gltf', (gltf) => {
+
+gltfLoader.load('/models/Fox/glTF/Fox.gltf', (loadedModel) => {
+	gltf = loadedModel;
 	gltf.scene.scale.set(0.025, 0.025, 0.025);
 	mixer = new THREE.AnimationMixer(gltf.scene);
-	const action = mixer.clipAction(gltf.animations[1]);
-	action.play();
 	scene.add(gltf.scene);
 });
 
