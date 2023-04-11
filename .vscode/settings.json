@@ -2,5 +2,21 @@
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnPaste": true,
 	"editor.formatOnSave": true,
-	"prettier.useTabs": true
+	"prettier.useTabs": true,
+	"glsl-linter.validatorPath": "C:\\Users\\rcaru\\source\\repos\\ThreeJsJourney\\27-Shaders\\plugin\\glslang-master-windows-x64-Release\\bin\\glslangValidator",
+	"glsl-linter.fileExtensions": {
+		".fs.glsl": "frag",
+		".fs": "frag",
+		".vs.glsl": "vert",
+		".vs": "vert",
+		".tes.glsl": "tese",
+		".tes": "tese",
+		".tcs.glsl": "tesc",
+		".tcs": "tesc",
+		".gs.glsl": "geom",
+		".gs": "geom"
+	},
+	"files.associations": {
+		"*.iglsl": "glsl"
+	}
 }
