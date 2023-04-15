@@ -18,5 +18,8 @@
 	},
 	"files.associations": {
 		"*.iglsl": "glsl"
+	},
+	"[glsl]": {
+		"editor.defaultFormatter": "raczzalan.webgl-glsl-editor"
 	}
 }
