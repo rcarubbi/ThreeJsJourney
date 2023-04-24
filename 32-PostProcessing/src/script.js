@@ -2,21 +2,25 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { DotScreenPass } from 'three/addons/postprocessing/DotScreenPass.js';
 import { GlitchPass } from 'three/addons/postprocessing/GlitchPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { RGBShiftShader } from 'three/addons/Shaders/RGBShiftShader.js';
-import { GammaCorrectionShader } from 'three/addons/Shaders/GammaCorrectionShader.js';
+import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader.js';
+import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader.js';
+
 import * as dat from 'lil-gui';
+
 import tintVertextShader from './shaders/tint/vertex.vs.iglsl';
 import tintFragmentShader from './shaders/tint/fragment.fs.iglsl';
 import displacementVertextShader from './shaders/displacement/vertex.vs.iglsl';
 import displacementFragmentShader from './shaders/displacement/fragment.fs.iglsl';
 import normalVertextShader from './shaders/normal/vertex.vs.iglsl';
 import normalFragmentShader from './shaders/normal/fragment.fs.iglsl';
+
 /**
  * Base
  */
