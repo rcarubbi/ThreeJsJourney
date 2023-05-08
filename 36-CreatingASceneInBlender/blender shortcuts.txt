@@ -1,0 +1,60 @@
+g = move
+g+[x,y,z] = move one axis
+g+[shift]+[z,y,x] = move all axis but one
+
+s = scale
+
+r = rotate
+
+tab = toggle edit/object mode
+
+shift + d = duplicate
+
+alt + d = duplicate linked
+
+z = toggle wireframe/solid/render
+
+shift - wheel = move camera
+
+edit mode -> control + l -> f3 -> bisect -> fill + clear outer = remove part of the object
+
+edit mode -> select faces -> i -> left click -> transform orientation = normal -> 
+check individual -> tweak thinkness -> left click = create inset
+
+select inset faces -> e -> transform orientation = normal, transform pivot point = individual origins + right click, orientation = normal, tweak z axis
+
+control + r -> wheel (change number of cuts) -> right click (default position) = loop cut
+
+edit mode -> select face -> e[axis] = extrude 
+
+object mode -> shift + a = add new mesh
+
+select an object -> x = delete object
+
+edit mode -> duplicate part of the geometry -> P -> selection = separate selection in another object (need to set origin to the new geometry)
+
+edit mode -> control + l = select all faces
+
+object mode -> f3 -> origin to geometry = center ogigin
+
+object mode -> a = select all
+
+f3 -> make single user single -> Object & data = unlink selected objects
+
+move in edit mode to change origin, scale in object mode with the new origin to keep the object in the surface
+
+keep the object far from the origin, duplicate and rotate to make a circle of objects around the origin
+
+f3 -> repeat last = redo the last operation
+
+check face orientation -> select red faces -> f3 -> flip = flip wrong oriented faces
+or f3 -> recalculate outside
+
+select object -> / = focus mode
+
+a -> control + a = fix scales
+
+
+
+
+
