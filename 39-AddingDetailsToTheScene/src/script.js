@@ -2,14 +2,48 @@ import * as dat from 'lil-gui';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-
+import firefliesVertexShader from './shaders/fireflies/vertex.vs.iglsl';
+import firefliesFragmentShader from './shaders/fireflies/fragment.fs.iglsl';
+import portalVertexShader from './shaders/portal/vertex.vs.iglsl';
+import portalFragmentShader from './shaders/portal/fragment.fs.iglsl';
 /**
  * Base
  */
 // Debug
+const debugObject = {
+	clearColor: 0x3a222b,
+	firefliesCount: 50,
+	portalInnerColor: 0xffc96b,
+	portalOuterColor: 0x54124b,
+};
 const gui = new dat.GUI({
 	width: 400,
 });
+
+gui.addColor(debugObject, 'clearColor').onChange(() => {
+	renderer.setClearColor(debugObject.clearColor);
+});
+
+gui.addColor(debugObject, 'portalInnerColor').onChange(() => {
+	portalLightMaterial.uniforms.uEndColor.value.set(
+		debugObject.portalInnerColor
+	);
+});
+
+gui.addColor(debugObject, 'portalOuterColor').onChange(() => {
+	portalLightMaterial.uniforms.uStartColor.value.set(
+		debugObject.portalOuterColor
+	);
+});
+
+gui.add(debugObject, 'firefliesCount')
+	.min(1)
+	.max(100)
+	.step(1)
+	.name('Fire flies Count')
+	.onChange(() => {
+		generateFireflies();
+	});
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl');
@@ -44,9 +78,15 @@ const poleLightMaterial = new THREE.MeshBasicMaterial({
 	color: 0xfffbe2,
 });
 
-const portalLightMaterial = new THREE.MeshBasicMaterial({
-	color: 0xfffdc3,
+const portalLightMaterial = new THREE.ShaderMaterial({
+	vertexShader: portalVertexShader,
+	fragmentShader: portalFragmentShader,
 	side: THREE.DoubleSide,
+	uniforms: {
+		uTime: { value: 0 },
+		uStartColor: { value: new THREE.Color(debugObject.portalOuterColor) },
+		uEndColor: { value: new THREE.Color(debugObject.portalInnerColor) },
+	},
 });
 
 /**
@@ -77,6 +117,64 @@ gltfLoader.load('portal.glb', (gltf) => {
 });
 
 /**
+ * Fireflies
+ */
+//Geometry
+let fireflies;
+let firefliesGeometry;
+
+const generateFireflies = () => {
+	if (fireflies) {
+		scene.remove(fireflies);
+		firefliesGeometry.dispose();
+	}
+
+	firefliesGeometry = new THREE.BufferGeometry();
+	const firefliesPositions = new Float32Array(debugObject.firefliesCount * 3);
+	const firefliesScales = new Float32Array(debugObject.firefliesCount * 1);
+	for (let i = 0; i < debugObject.firefliesCount; i++) {
+		firefliesPositions[i * 3 + 0] = (Math.random() - 0.5) * 4;
+		firefliesPositions[i * 3 + 1] = Math.random() * 2;
+		firefliesPositions[i * 3 + 2] = (Math.random() - 0.5) * 4;
+
+		firefliesScales[i] = Math.random();
+	}
+
+	firefliesGeometry.setAttribute(
+		'position',
+		new THREE.BufferAttribute(firefliesPositions, 3)
+	);
+
+	firefliesGeometry.setAttribute(
+		'aScale',
+		new THREE.BufferAttribute(firefliesScales, 1)
+	);
+
+	fireflies = new THREE.Points(firefliesGeometry, firefliesMaterial);
+	scene.add(fireflies);
+};
+
+// Material
+const firefliesMaterial = new THREE.ShaderMaterial({
+	uniforms: {
+		uTime: { value: 0 },
+		uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+		uSize: { value: 100 },
+	},
+	transparent: true,
+	vertexShader: firefliesVertexShader,
+	fragmentShader: firefliesFragmentShader,
+	blending: THREE.AdditiveBlending,
+	depthWrite: false,
+});
+gui.add(firefliesMaterial.uniforms.uSize, 'value')
+	.min(0)
+	.max(500)
+	.step(1)
+	.name('Fire flies Size');
+generateFireflies();
+
+/**
  * Sizes
  */
 const sizes = {
@@ -96,6 +194,11 @@ window.addEventListener('resize', () => {
 	// Update renderer
 	renderer.setSize(sizes.width, sizes.height);
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+	firefliesMaterial.uniforms.uPixelRatio.value = Math.min(
+		window.devicePixelRatio,
+		2
+	);
 });
 
 /**
@@ -127,7 +230,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
-
+renderer.setClearColor(debugObject.clearColor);
 /**
  * Animate
  */
@@ -135,6 +238,9 @@ const clock = new THREE.Clock();
 
 const tick = () => {
 	const elapsedTime = clock.getElapsedTime();
+
+	firefliesMaterial.uniforms.uTime.value = elapsedTime;
+	portalLightMaterial.uniforms.uTime.value = elapsedTime;
 
 	// Update controls
 	controls.update();
