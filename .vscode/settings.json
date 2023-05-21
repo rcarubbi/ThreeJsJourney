@@ -17,7 +17,8 @@
 		".gs": "geom"
 	},
 	"files.associations": {
-		"*.iglsl": "glsl"
+		"*.iglsl": "glsl",
+		"*.css": "css"
 	},
 	"[glsl]": {
 		"editor.defaultFormatter": "raczzalan.webgl-glsl-editor"
